@@ -1,0 +1,86 @@
+/* 小红书笔记收集器 - 样式文件 */
+
+.xhs-save-button {
+  margin: 0;
+  padding: 0;
+}
+
+.xhs-float-ball {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+  border-radius: 25px 0 0 25px;
+  box-shadow: 0 4px 16px rgba(255, 36, 66, 0.3);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 50px;
+  height: 50px;
+}
+
+.xhs-float-ball:hover {
+  width: 140px;
+  box-shadow: 0 6px 20px rgba(255, 36, 66, 0.4);
+}
+
+.xhs-click-area {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.xhs-ball-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.xhs-ball-icon:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.xhs-ball-text {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-right: 15px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.xhs-ball-text:hover {
+  text-decoration: underline;
+}
+
+.xhs-float-ball:hover .xhs-ball-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.xhs-save-button.dragging .xhs-float-ball {
+  box-shadow: 0 8px 24px rgba(255, 36, 66, 0.5);
+  transform: scale(1.05);
+}
+
+.xhs-save-button.dragging .xhs-ball-icon {
+  color: white;
+  transform: scale(1.2);
+}
+
+/* 确保按钮不会被小红书的样式覆盖 */
+.xhs-save-button * {
+  box-sizing: border-box;
+}
