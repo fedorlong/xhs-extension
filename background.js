@@ -63,36 +63,80 @@ async function getAccessToken(appId, appSecret) {
   return data.tenant_access_token;
 }
 
+// 上传图片到飞书云文档
+async function uploadImageToFeishu(accessToken, appToken, imageUrl) {
+  if (!imageUrl) return null;
+  
+  try {
+    // 下载图片
+    const imageResponse = await fetch(imageUrl);
+    const imageBlob = await imageResponse.blob();
+    
+    // 准备上传表单
+    const formData = new FormData();
+    formData.append('file_name', 'cover.jpg');
+    formData.append('parent_type', 'bitable_image');
+    formData.append('parent_node', appToken); // 使用云文档token
+    formData.append('size', imageBlob.size);
+    formData.append('file', imageBlob);
+    
+    // 上传到飞书
+    const uploadResponse = await fetch('https://open.feishu.cn/open-apis/drive/v1/medias/upload_all', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: formData
+    });
+    
+    const uploadData = await uploadResponse.json();
+    if (uploadData.code !== 0) {
+      console.error('Upload image failed:', uploadData);
+      return null;
+    }
+    
+    return uploadData.data.file_token;
+  } catch (error) {
+    console.error('Upload image error:', error);
+    return null;
+  }
+}
+
 // 保存数据到飞书多维表格
 async function saveToFeishuTable(accessToken, appToken, tableId, noteData) {
+  // 上传封面图片
+  const coverFileToken = await uploadImageToFeishu(accessToken, appToken, noteData.cover);
+  
+  const fields = {
+    '标题': noteData.title,
+    '内容': noteData.content,
+    '点赞数': noteData.likes,
+    '收藏数': noteData.collects,
+    '评论数': noteData.comments,
+    '原文链接': {
+      text: noteData.title || '小红书笔记',
+      link: noteData.url
+    }
+  };
+  
+  // 如果上传成功，添加封面附件
+  if (coverFileToken) {
+    fields['封面'] = [{
+      file_token: coverFileToken
+    }];
+  }
+  
   const createResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/records`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      fields: {
-        '标题': noteData.title,
-        '内容': noteData.content,
-        '点赞数': noteData.likes,
-        '收藏数': noteData.collects,
-        '评论数': noteData.comments,
-        '封面': {
-          text: '封面图片',
-          link: noteData.cover
-        },
-        '原文链接': {
-          text: noteData.title || '小红书笔记',
-          link: noteData.url
-        }
-      }
-    })
+    body: JSON.stringify({ fields })
   });
 
   const createData = await createResponse.json();
   if (createData.code !== 0) {
-    // throw new Error(`保存数据失败: ${createData.msg}`);
     throw new Error(`保存数据失败: ${JSON.stringify(createData)}`);
   }
 
