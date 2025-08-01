@@ -9,18 +9,18 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
-  border-radius: 25px 0 0 25px;
-  box-shadow: 0 4px 16px rgba(255, 36, 66, 0.3);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 20px 0 0 20px;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.25);
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 
 .xhs-float-ball:hover {
-  width: 140px;
-  box-shadow: 0 6px 20px rgba(255, 36, 66, 0.4);
+  width: 120px;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
 }
 
 .xhs-click-area {
@@ -34,9 +34,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  color: rgba(255, 255, 255, 0.8);
+  width: 40px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.9);
   cursor: move;
   user-select: none;
   flex-shrink: 0;
@@ -50,13 +50,13 @@
 
 .xhs-ball-text {
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-8px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding-right: 15px;
+  padding-right: 12px;
   cursor: pointer;
   user-select: none;
 }
@@ -71,13 +71,13 @@
 }
 
 .xhs-save-button.dragging .xhs-float-ball {
-  box-shadow: 0 8px 24px rgba(255, 36, 66, 0.5);
-  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  transform: scale(1.03);
 }
 
 .xhs-save-button.dragging .xhs-ball-icon {
   color: white;
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 /* 确保按钮不会被小红书的样式覆盖 */
